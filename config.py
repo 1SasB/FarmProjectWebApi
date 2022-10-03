@@ -30,7 +30,7 @@ class Config(object):
     TESTING = False
     SECRET_KEY = 'f@rm&ji9)/opsd45sd' 
     SECURITY_PASSWORD_SALT = "sdfsd./sdfsd"
-    MONGO_URI = os.environ.get('DATABASE_URL') or 'mongodb://localhost:27017/FarmDatabase'
+    MONGO_URI = os.environ.get('DATABASE_URL') or 'mongodb+srv://1stilinski:psalm123@cluster0.ikxqn.mongodb.net/FarmProject'
     PERMANENT_SESSION_LIFETIME =  timedelta(minutes=15)
     LANGUAGES = ['en','fr']
     MAIL_SERVER = 'smtp.gmail.com'
