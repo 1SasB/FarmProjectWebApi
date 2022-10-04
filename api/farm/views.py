@@ -6,11 +6,26 @@ from api.save_image import save_pic_farm,save_pic_id
 from api.validate import validate_project
 import datetime
 from flask_mail import Mail
+from api.momo_api import api_user_id,user_key,get_token,request_to_pay
+import uuid, ast,string,random
 
 from api.models import FarmProject,Sponserd
 from api.auth.auth_middleware import token_required
 
 project = Blueprint(name="project",import_name=__name__,template_folder="templates")
+
+
+def make_momo_api_call(x_Reference_Id,phone_numnber,amount):
+    api_user_id(x_Reference_Id)
+    api_user_key = user_key(x_Reference_Id)
+    key = api_user_key.get('Data')
+    print("User Key: ",key)
+    gen_token = get_token(x_Reference_Id,key)
+    auth_token = gen_token.get('Data')
+    print("Token: ",auth_token)
+    request_status = request_to_pay(x_Reference_Id,auth_token,phone_numnber,amount)
+    print(str(request_status))
+    return request_status
 
 
 
@@ -130,8 +145,8 @@ def update_project(current_user, project_id):
             }, 404
         project = request.form
         print(project)
-        if project.get('cover_image'):
-            project["image_url"] = request.host_url+"static/projects/"+save_pic_farm(request.files["cover_image"])
+        if project.get('project_image'):
+            project["image_url"] = request.host_url+"static/images/farms/"+save_pic_farm(request.files["cover_image"])
         project = FarmProject().update(project_id, dict(project))
         return jsonify({
             "message": "successfully updated a project",
@@ -180,6 +195,47 @@ def sponsord(current_user):
         data = Sponserd().get_by_user_id(current_user._id)
         return {
            "message": "Successfully Got sponse",
+            "data": data
+        }, 200
+    except Exception as e:
+        return {
+            "message": "Something went wrong",
+            "error": str(e),
+            "data": None
+        }, 500
+
+@project.route("/pay-sponser/<sponsered_id>", methods=["GET"])
+@token_required
+def pay_sponsord(current_user,sponsered_id):
+    try:
+        data = Sponserd().get_by_id(sponsered_id)
+        x_Reference_Id =  str(uuid.uuid4())
+        request_status = make_momo_api_call(x_Reference_Id,current_user.get("phone"),data.get("total_amount"))
+        if str(request_status) == "202":
+            data = Sponserd().pay()
+            return {
+                "message": "Successfully Payed For Farm sponse",
+                "data": data
+            }, 200
+        else:
+            return{
+                "message": "Payment Unsuccessful",
+                "data": None
+            },400
+    except Exception as e:
+        return {
+            "message": "Something went wrong",
+            "error": str(e),
+            "data": None
+        }, 500
+
+@project.route("/sponserd/<sponsered_id>", methods=["GET"])
+@token_required
+def get_sponsord(current_user,sponsered_id):
+    try:
+        data = Sponserd().get_by_id(sponsered_id)
+        return {
+           "message": "Successfully Got sponsered Project",
             "data": data
         }, 200
     except Exception as e:

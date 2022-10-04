@@ -78,18 +78,10 @@ def confirm_email(token):
         email = confirm_token(token)
     except Exception as e:
         print()
-        return {
-            "message": "The confirmation link is invalid or has expired",
-            "error": str(e),
-            "data": None
-        }
+        return '<h1>The confirmation link is invalid or has expired</h1>'
     user = User().get_by_email(email)
     if user.get('confirmed'):
-        return {
-            "message": "Account already confirmed. Please login.",
-            "error": "conflict",
-            "data": None
-        },409
+        return '<h1>Account already confirmed. Please login.</h1>'
     else:
         user = User().update(user.get('_id'),{
             "confirmed": True,
@@ -99,10 +91,7 @@ def confirm_email(token):
             return{
                 "message": "Couldnt confirm account"
             }, 500
-        return{
-            "message": "Successfully created new user",
-            "data": user
-        }, 201
+        return '<h1>Email Confirmation successful</h1>'
 
 
 

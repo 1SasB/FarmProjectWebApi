@@ -1,4 +1,5 @@
 """Application Models"""
+from datetime import datetime
 import bson, os
 from api import mongo
 from dotenv import load_dotenv
@@ -17,7 +18,7 @@ class FarmProject:
     def __init__(self):
         return
 
-    def create(self, title="", description="", image_url="", product="", user_id="",resources=""):
+    def create(self, title="", description="", image_url="", product="", user_id="",resources="",cost_per_unit="",start_date="",end_date="",available_slots=""):
         """Create a new Farm Project"""
         project = self.get_by_user_id_and_title(user_id, title)
         if project:
@@ -30,7 +31,11 @@ class FarmProject:
                 "product": product,
                 "user_id": user_id,
                 "resources": resources,
-                "status": "upcoming"
+                "status": "upcoming",
+                "cost_per_unit": cost_per_unit,
+                "start_date": start_date,
+                "end_date": end_date,
+                "available_slot": available_slots
 
             }
         )
@@ -80,7 +85,7 @@ class FarmProject:
         # if image_url: data["image_url"]=image_url
         # if product: data["category"]=product
 
-        allowed_keys = ["title","desciption","image_url","product","cost_per_unit","resources","start_date","end_date"]
+        allowed_keys = ["title","desciption","image_url","product","cost_per_unit","resources","start_date","end_date","ROS","available_slots"]
         ndata = {}
         for i in data.keys():
             if i in allowed_keys:
@@ -137,21 +142,29 @@ class User:
         )
         return self.get_by_id(new_user.inserted_id)
 
-    def create_profile(self,user_id,first_name="",last_name="",dob="",phone="",residential_address="",id_number="",id_image_url="",gender=""):
+    def create_profile(self,user_id,data):
         print("inside create profile")
-        data = {}
-        if first_name: data["first_name"]=first_name
-        if last_name: data["last_name"]=last_name
-        if dob: data['dob']=dob
-        if phone: data["phone"]=phone
-        if residential_address: data["residential_address"]=residential_address
-        if id_image_url: data["id_image_url"]=id_image_url
-        if id_number: data["id_number"]=id_number
-        if gender: data["gender"]=gender
+        # data = {}
+        # if first_name: data["first_name"]=first_name
+        # if last_name: data["last_name"]=last_name
+        # if dob: data['dob']=dob
+        # if phone: data["phone"]=phone
+        # if residential_address: data["residential_address"]=residential_address
+        # if id_image_url: data["id_image_url"]=id_image_url
+        # if id_number: data["id_number"]=id_number
+        # if gender: data["gender"]=gender
+
+
+        allowed_keys = ["first_name","last_name","middle_name","confirmed","confirmed_on","profile_completed","dob","phone","gender","id_type","id_photo_url","id_number","residential_address"]
+        ndata = {}
+        for i in ndata.keys():
+            if i in allowed_keys:
+                ndata[i] = data[i]
+        ndata["profile_completed"] = True
         user = db.users.update_one(
             {"_id": bson.ObjectId(user_id)},
             {
-                "$set": data
+                "$set": ndata
             }
         )
         user = self.get_by_id(user_id)
@@ -265,7 +278,7 @@ class Sponserd():
     def __init__(self):
         return
     
-    def create(self,user_id="",project_id="",harvest_type="",name="",unit_number="",note="",payment_type="",crop_type=""):
+    def create(self,user_id="",project_id="",harvest_type="",name="",unit_number="",note="",payment_type="",crop_type="",total_amount=""):
         print("about to create a sponser")
         print(harvest_type)
         if not project_id:
@@ -281,7 +294,9 @@ class Sponserd():
                 "crop_type":crop_type,
                 "units": unit_number,
                 "note": note,
-                "payment_type": payment_type
+                "payment_type": payment_type,
+                "total_amount": total_amount,
+                "payed": False
             }
 
         )
@@ -291,9 +306,22 @@ class Sponserd():
         """ Get a model by id """
         sponsord = db.sponsord.find_one({"_id": bson.ObjectId(sponsord_id)})
         if not sponsord:
-            return
+            return {
+                "message": "Sponsored Data not found",
+                "data": None
+            },404
         sponsord["_id"] = str(sponsord["_id"])
         return sponsord
+    
+    def pay(self, sponsord_id):
+        spons = db.sponsord.update_one(
+            {"_id": bson.ObjectId(sponsord_id)},
+            {"$set": {
+                "payed": True,
+                "payment_time": datetime.now()
+            }}
+        )
+
     
     def get_all(self):
         """Get all sponsord profile"""
@@ -304,3 +332,11 @@ class Sponserd():
         """ Get a models by user_id """
         sponsord = db.sponsord.find({"user_id": bson.ObjectId(user_id)})
         return [{**sponsor, "_id": str(sponsor["_id"])} for sponsor in sponsord]
+    
+    # def get_by_user_id_and_sponsord_id(self, user_id, sponser):
+    #     """Get a project given its title and author"""
+    #     project = db.projects.find_one({"user_id": user_id, "title": title})
+    #     if not project:
+    #         return
+    #     project["_id"] = str(project["_id"])
+    #     return project
