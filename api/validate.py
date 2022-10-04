@@ -110,10 +110,10 @@ def validate_user_profile(**args):
     #         'DOB': 'Date of Birth is invalid'
     #     }
     
-    if not (2 <= len(args['first_name'].split(' ')) <= 30) or (2 <= len(args['last_name'].split(' ')) <= 30):
-        return {
-            'name': 'Name must be between 2 and 30 words'
-        }
+    # if not (2 <= len(args['first_name'].split(' ')) <= 30) or (2 <= len(args['last_name'].split(' ')) <= 30):
+    #     return {
+    #         'name': 'Name must be between 2 and 30 words'
+    #     }
     return True
 
 def validate_email_and_password(email, password):
