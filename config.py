@@ -30,7 +30,7 @@ class Config(object):
     TESTING = False
     SECRET_KEY = 'f@rm&ji9)/opsd45sd' 
     SECURITY_PASSWORD_SALT = "sdfsd./sdfsd"
-    MONGO_URI = os.environ.get('DATABASE_URL') or 'mongodb://localhost:27017/FarmDatabase'
+    # MONGO_URI = os.environ.get('DATABASE_URL') or 'mongodb://localhost:27017/FarmDatabase'
     PERMANENT_SESSION_LIFETIME =  timedelta(minutes=15)
     LANGUAGES = ['en','fr']
     MAIL_SERVER = 'smtp.gmail.com'
@@ -45,10 +45,12 @@ class Config(object):
 
 
 class ProductionConfig(Config):
+    MONGO_URI = os.environ.get('DATABASE_URL') or 'mongodb+srv://1stilinski:psalm123@cluster0.ikxqn.mongodb.net/FarmDatabase?retryWrites=true&w=majority'
     MONGO_DBNAME = 'FarmDatabase'
 
 
 class DevelopmentConfig(Config):
+    MONGO_URI = os.environ.get('DATABASE_URL') or 'mongodb://localhost:27017/FarmDatabase'
     MONGO_DBNAME = 'FarmDatabase'
     DEBUG = True
 

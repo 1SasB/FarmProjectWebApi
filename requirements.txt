@@ -1,6 +1,7 @@
 blinker==1.5
 click==8.0.1
 colorama==0.4.5
+dnspython==1.16.0
 Flask==2.0.1
 Flask-Mail==0.9.1
 Flask-PyMongo==2.3.0
