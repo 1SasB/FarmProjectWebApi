@@ -99,7 +99,7 @@ def confirm_email(token):
 @token_required
 def create_user_profile(current_user):
     try:
-        profile = request.json
+        profile = request.form
         if not profile:
             return {
                 "message": "Please provide profile details",
@@ -107,6 +107,7 @@ def create_user_profile(current_user):
                 "error": "Bad request"
             }, 400
         is_validated = validate_user_profile(**profile)
+        profile["id_photo_url"] = request.host_url+"static/images/id/"+save_pic_id(request.files["id_photo"])
         if is_validated is not True:
             return dict(message='Invalid data', data=None, error=is_validated), 400
         user = User().create_profile(current_user["_id"],**profile)
@@ -199,7 +200,7 @@ def update_user(current_user):
         user = dict(request.form)
         print(user)
         if user:
-            user["id_photo_url"] = request.host_url+"static/images/user/"+save_pic_id(request.files["id_photo"])
+            user["id_photo_url"] = request.host_url+"static/images/id/"+save_pic_id(request.files["id_photo"])
             user = User().update(current_user["_id"], user)
             return jsonify({
                 "message": "successfully updated account",

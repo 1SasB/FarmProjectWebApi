@@ -82,7 +82,7 @@ def validate_user(**args):
 
 def validate_user_profile(**args):
     """Profile Validator"""
-    if  not args.get('first_name') or not args.get('last_name') or not args.get('gender') or not args.get('id_image_url') or\
+    if  not args.get('first_name') or not args.get('last_name') or not args.get('gender') or  not args.get('id_type') or\
         not args.get('dob') or not args.get('phone') or not args.get('id_number') or not args.get('residential_address'):
         return {
             'first_name': 'First Name is required',
@@ -91,7 +91,6 @@ def validate_user_profile(**args):
             'phone': 'Phone is required',
             'residential_address': 'Residential Addrees is required',
             'id_number': 'ID card number is required',
-            'id_image_url': 'Image url is required',
             'gender':"gender is required"
         }
     if not isinstance(args.get('first_name'), str) or not isinstance(args.get('last_name'), str)  or\
@@ -104,7 +103,6 @@ def validate_user_profile(**args):
             'phone': 'Phone must be a string',
             'residential_address': 'Residential Address must be a string',
             'id_number': 'ID card number must be a string',
-            'id_image_url': 'Image url must be a string',
             "gender":"gender must be a string"
         }
     # if not validate_date(args.get('dob')):
