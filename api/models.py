@@ -18,7 +18,7 @@ class FarmProject:
     def __init__(self):
         return
 
-    def create(self, title="", description="", image_url="", product="", user_id="",resources="",cost_per_unit="",start_date="",end_date="",available_slots=""):
+    def create(self, title="", description="", image_url="", product="", user_id="",resources="",cost_per_unit="",start_date="",end_date="",available_slots="",ROS=""):
         """Create a new Farm Project"""
         project = self.get_by_user_id_and_title(user_id, title)
         if project:
@@ -35,7 +35,8 @@ class FarmProject:
                 "cost_per_unit": cost_per_unit,
                 "start_date": start_date,
                 "end_date": end_date,
-                "available_slot": available_slots
+                "available_slot": available_slots,
+                "ROS" :ROS
 
             }
         )
