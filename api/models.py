@@ -157,7 +157,7 @@ class User:
 
         allowed_keys = ["first_name","last_name","middle_name","dob","phone","gender","id_type","id_photo_url","id_number","residential_address"]
         ndata = {}
-        for i in ndata.keys():
+        for i in data.keys():
             if i in allowed_keys:
                 ndata[i] = data[i]
         ndata["profile_completed"] = True
