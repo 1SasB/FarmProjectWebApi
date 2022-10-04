@@ -95,7 +95,7 @@ def validate_user_profile(**args):
         }
     if not isinstance(args.get('first_name'), str) or not isinstance(args.get('last_name'), str)  or\
         not isinstance(args.get('dob'), str) or not isinstance(args.get('phone'), str) or not isinstance(args.get('gender'),str) or\
-        not isinstance(args.get('id_number'), str) or not isinstance(args.get('residential_address'), str) or not isinstance(args.get('id_image_url'), str):
+        not isinstance(args.get('id_number'), str) or not isinstance(args.get('residential_address'), str):
         return {
             'first_name': 'First Name must be a string',
             'last_name': 'Last Name must be a string',
