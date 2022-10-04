@@ -155,7 +155,7 @@ class User:
         # if gender: data["gender"]=gender
 
 
-        allowed_keys = ["first_name","last_name","middle_name","confirmed","confirmed_on","profile_completed","dob","phone","gender","id_type","id_photo_url","id_number","residential_address"]
+        allowed_keys = ["first_name","last_name","middle_name","dob","phone","gender","id_type","id_photo_url","id_number","residential_address"]
         ndata = {}
         for i in ndata.keys():
             if i in allowed_keys:

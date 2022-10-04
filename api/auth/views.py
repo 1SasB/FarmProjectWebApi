@@ -99,7 +99,7 @@ def confirm_email(token):
 @token_required
 def create_user_profile(current_user):
     try:
-        profile = request.form
+        profile = dict(request.form)
         if not profile:
             return {
                 "message": "Please provide profile details",
