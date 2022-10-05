@@ -116,7 +116,7 @@ def create_user_profile(current_user):
         profile["id_photo_url"] = request.host_url+"static/images/id/"+save_pic_id(request.files["id_photo"])
         if is_validated is not True:
             return dict(message='Invalid data', data=None, error=is_validated), 400
-        user = User().create_profile(current_user["_id"],profile)
+        user = User().create_profile(current_user.get("_id"),profile)
         if not user:
             return {
                 "message": "Couldnt create user pofile",
