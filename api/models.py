@@ -331,7 +331,7 @@ class Sponserd():
     
     def get_by_user_id(self, user_id):
         """ Get a models by user_id """
-        sponsord = db.sponsord.find({"user_id": bson.ObjectId(user_id)})
+        sponsord = db.sponsord.find({"user_id": user_id})
         return [{**sponsor, "_id": str(sponsor["_id"])} for sponsor in sponsord]
     
     # def get_by_user_id_and_sponsord_id(self, user_id, sponser):

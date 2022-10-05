@@ -80,6 +80,10 @@ def confirm_email(token):
         print()
         return '<h1>The confirmation link is invalid or has expired</h1>'
     user = User().get_by_email(email)
+    if not user:
+        return{
+            '<h1>User Does not exist.</h1>'
+        }
     if user.get('confirmed'):
         return '<h1>Account already confirmed. Please login.</h1>'
     else:

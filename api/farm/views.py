@@ -192,12 +192,13 @@ def sponser_project(current_user):
 @token_required
 def sponsord(current_user):
     try:
-        data = Sponserd().get_by_user_id(current_user._id)
+        data = Sponserd().get_by_user_id(current_user.get("_id"))
         return {
            "message": "Successfully Got sponse",
             "data": data
         }, 200
     except Exception as e:
+        print(e)
         return {
             "message": "Something went wrong",
             "error": str(e),
