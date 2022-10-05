@@ -113,7 +113,8 @@ def create_user_profile(current_user):
             }, 400
         # is_validated = validate_user_profile(**profile)
         is_validated = True
-        profile["id_photo_url"] = request.host_url+"static/images/id/"+save_pic_id(request.files["id_photo"])
+        # profile["id_photo_url"] = request.host_url+"static/images/id/"+save_pic_id(request.files["id_photo"])
+        profile["id_photo_url"] = ""
         if is_validated is not True:
             return dict(message='Invalid data', data=None, error=is_validated), 400
         user = User().create_profile(current_user.get("_id"),profile)
