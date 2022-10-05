@@ -345,6 +345,7 @@ class Sponserd():
             }}
         )
         spons = self.get_by_id(sponsord_id)
+        spons["_id"] = str(spons.get("_id"))
         return spons
 
     
