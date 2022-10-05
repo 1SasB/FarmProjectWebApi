@@ -104,13 +104,15 @@ def confirm_email(token):
 def create_user_profile(current_user):
     try:
         profile = dict(request.form)
+        print(profile)
         if not profile:
             return {
                 "message": "Please provide profile details",
                 "data": None,
                 "error": "Bad request"
             }, 400
-        is_validated = validate_user_profile(**profile)
+        # is_validated = validate_user_profile(**profile)
+        is_validated = True
         profile["id_photo_url"] = request.host_url+"static/images/id/"+save_pic_id(request.files["id_photo"])
         if is_validated is not True:
             return dict(message='Invalid data', data=None, error=is_validated), 400
