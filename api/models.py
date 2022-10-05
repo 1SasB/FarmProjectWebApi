@@ -336,7 +336,7 @@ class Sponserd():
         return sponsord
     
     def pay(self, sponsord_id):
-        spons = db.sponsord.update_one(
+        sponss = db.sponsord.update_one(
             {"_id": bson.ObjectId(sponsord_id)},
             {"$set": {
                 "payed": True,
@@ -344,6 +344,7 @@ class Sponserd():
                 "transaction_id":"rfdis45646sd"
             }}
         )
+        spons = self.get_by_id(sponsord_id)
         return spons
 
     
