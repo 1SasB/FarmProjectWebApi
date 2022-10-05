@@ -279,7 +279,7 @@ class Sponserd():
     def __init__(self):
         return
     
-    def create(self,user_id="",project_id="",harvest_type="",name="",unit_number="",note="",payment_type="",crop_type="",total_amount=""):
+    def create(self,user_id="",project_id="",harvest_type="",name="",unit_number="",note="",payment_type="",crop_type="",total_amount="",cost_per_unit="",ROS=""):
         print("about to create a sponser")
         print(harvest_type)
         if not project_id:
@@ -297,11 +297,32 @@ class Sponserd():
                 "note": note,
                 "payment_type": payment_type,
                 "total_amount": total_amount,
-                "payed": False
+                "cost_per_unit": cost_per_unit,
+                "ROS": ROS,
+                "payed": False,
+                "progress": [],
+                "finance":""
             }
 
         )
         return self.get_by_id(sponsord_project.inserted_id)
+    
+    def update(self, spons_id, data):
+        """Update a user"""
+        allowed_keys = ["name","harvest_type","units","note","payment_type","total_amount"]
+        ndata = {}
+        for i in data.keys():
+            if i in allowed_keys:
+                ndata[i] = data[i]
+
+        spons = db.sponsord.update_one(
+            {"_id": bson.ObjectId(spons_id)},
+            {
+                "$set": ndata
+            }
+        )
+        user = self.get_by_id(spons_id)
+        return user
     
     def get_by_id(self, sponsord_id):
         """ Get a model by id """
@@ -319,9 +340,11 @@ class Sponserd():
             {"_id": bson.ObjectId(sponsord_id)},
             {"$set": {
                 "payed": True,
-                "payment_time": datetime.now()
+                "payment_time": datetime.now(),
+                "transaction_id":"rfdis45646sd"
             }}
         )
+        return spons
 
     
     def get_all(self):

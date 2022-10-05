@@ -188,6 +188,36 @@ def sponser_project(current_user):
             "data": None
         }, 500
 
+@project.route("/sponserproject/update/<spons_id>", methods=["POST"])
+@token_required
+def update_sponser_project(current_user,spons_id):
+    try:
+        print("inside update soonser project")
+        content = dict(request.form)
+        # project_id = content.get("project_id")
+        # print(current_user)
+
+        data = Sponserd().update(spons_id,content)
+        print("crerated project")
+        if not data:
+            return {
+                "message": "Couldnt Update sponsered",
+                "error": "Conflict",
+                "data": None
+            }, 400
+        return {
+            "message": "Successfully Updated sponsored project",
+            "data": data
+        }, 201
+    except Exception as e:
+        print(e)
+        return {
+            "message": "Something went wrong",
+            "error": str(e),
+            "data": None
+        }, 500
+
+
 @project.route("/user/sponserd", methods=["GET"])
 @token_required
 def sponsord(current_user):
@@ -205,17 +235,18 @@ def sponsord(current_user):
             "data": None
         }, 500
 
-@project.route("/pay-sponser/<sponsered_id>", methods=["GET"])
+@project.route("/pay-sponser/<sponsered_id>", methods=["POST"])
 @token_required
 def pay_sponsord(current_user,sponsered_id):
     try:
         data = Sponserd().get_by_id(sponsered_id)
+        print(data)
         x_Reference_Id =  str(uuid.uuid4())
-        request_status = make_momo_api_call(x_Reference_Id,current_user.get("phone"),data.get("total_amount"))
+        request_status = make_momo_api_call(x_Reference_Id,current_user.get("phone"),float(data.get("total_amount")))
         if str(request_status) == "202":
-            data = Sponserd().pay()
+            data = Sponserd().pay(sponsered_id)
             return {
-                "message": "Successfully Payed For Farm sponse",
+                "message": "Success",
                 "data": data
             }, 200
         else:

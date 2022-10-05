@@ -16,7 +16,7 @@ def api_user_id(x_Ref_Id):
     params = urllib.parse.urlencode({
     })
 
-    body = json.dumps({"providerCallbackHost": "https://013473073ccf.ngrok.io" })
+    body = json.dumps({"providerCallbackHost": "https://ee99-154-160-22-170.ngrok.io" })
 
     try:
         conn = http.client.HTTPSConnection('sandbox.momodeveloper.mtn.com')
@@ -32,6 +32,7 @@ def api_user_id(x_Ref_Id):
             "Response reason : ": response.reason,
             "Data": data
         }
+        print(all_data)
         conn.close()
         
         return all_data
@@ -50,7 +51,7 @@ def user_key(user_id):
     params = urllib.parse.urlencode({
     })
     #add your domain name "<you domain name here>" is.
-    body = json.dumps({"providerCallbackHost": "https://013473073ccf.ngrok.io" })
+    body = json.dumps({"providerCallbackHost": "https://ee99-154-160-22-170.ngrok.io" })
 
     try:
         conn = http.client.HTTPSConnection('sandbox.momodeveloper.mtn.com')
@@ -69,6 +70,7 @@ def user_key(user_id):
             "Data": my_data.get('apiKey')
         }
         conn.close()
+        print(all_data)
         return all_data
     except Exception as e:
         return ("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -95,7 +97,7 @@ def get_token(user_id,user_key):
     params = urllib.parse.urlencode({
     })
     #add your domain name where "<you domain name here>" is.
-    body = json.dumps({"providerCallbackHost": "https://013473073ccf.ngrok.io" })
+    body = json.dumps({"providerCallbackHost": "https://ee99-154-160-22-170.ngrok.io" })
 
     try:
         conn = http.client.HTTPSConnection('sandbox.momodeveloper.mtn.com')
@@ -112,6 +114,7 @@ def get_token(user_id,user_key):
             "Response reason : ": response.reason,
             "Data": my_data.get('access_token')
         }
+        print(all_data)
         return all_data
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
@@ -148,7 +151,7 @@ def request_to_pay(user_id,token,mobile,amount):
 
             "externalId": "123456",
 
-            "payer": {"partyIdType": "MSISDN","partyId": "233"+mobile}, #phone should start by 250
+            "payer": {"partyIdType": "MSISDN","partyId": "250"+mobile}, #phone should start by 250
 
             "payerMessage": "You have made payment to me, thank you.",
 
@@ -161,13 +164,17 @@ def request_to_pay(user_id,token,mobile,amount):
         conn.request("POST", "/collection/v1_0/requesttopay?%s" % params, body, headers)
         response = conn.getresponse()
         data = response.read()
-        # print('Response status :',response.status)
-        # print('Response reason :',response.reason)
-        # print(data)
+        print('Response status :',response.status)
+        print('Response reason :',response.reason)
+        print(data)
+        
         return response.status
-        conn.close()
+        
     except Exception as e:
         print("[Error {0}] {1}".format(e.error, e.strerror))
         return ("[Error {0}] {1}".format(e.error, e.strerror))
+    finally:
+        conn.close()
+
 
 
