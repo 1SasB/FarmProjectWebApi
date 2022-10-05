@@ -128,6 +128,7 @@ def create_user_profile(current_user):
             "data": user
         }, 201
     except Exception as e:
+        print(e)
         return {
             "message": "Something went wrong",
             "error": str(e),
