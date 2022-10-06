@@ -347,6 +347,28 @@ class Sponserd():
         spons = self.get_by_id(sponsord_id)
         spons["_id"] = str(spons.get("_id"))
         return spons
+    
+    def update_progress(self, sponsord_id,data):
+        sponss = db.sponsord.update_one(
+            {"_id": bson.ObjectId(sponsord_id)},
+            {"$set": {
+                "progress": [
+                    {
+                        "name": data.get("stage1_name"),
+                        "images": [data.get("st1_image_url1"),data.get("st1_image_url2")],
+                        "progress_updated_on":  datetime.now()
+                    },
+                    {
+                        "name": data.get("stage2_name"),
+                        "images": [data.get("st2_image_url1"),data.get("st2_image_url2")],
+                        "progress_updated_on":  datetime.now()
+                    }
+                ]
+            }}
+        )
+        sponss = self.get_by_id(sponsord_id)
+        sponss["_id"] = str(sponss.get("_id"))
+        return sponss
 
     
     def get_all(self):

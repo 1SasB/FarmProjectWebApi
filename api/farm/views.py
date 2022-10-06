@@ -2,7 +2,7 @@
 import jwt, os
 # from dotenv import load_dotenv
 from flask import Flask, request, jsonify, Blueprint
-from api.save_image import save_pic_farm,save_pic_id
+from api.save_image import save_pic_farm,save_pic_id,save_pic_progress
 from api.validate import validate_project
 import datetime
 from flask_mail import Mail
@@ -270,6 +270,31 @@ def get_sponsord(current_user,sponsered_id):
            "message": "Successfully Got sponsered Project",
             "data": data
         }, 200
+    except Exception as e:
+        return {
+            "message": "Something went wrong",
+            "error": str(e),
+            "data": None
+        }, 500
+
+@project.route("/sponserd/update-progress/<sponsered_id>", methods=["POST"])
+@token_required
+def update_progress(current_user,sponsered_id):
+    try:
+        dta = dict(request.form)
+        files = dict(request.files)
+        print(dta)
+        print(files)
+        dta["st1_image_url1"] = request.host_url+"static/images/farms/"+save_pic_progress(files["stage_image1"])
+        dta["st1_image_url2"] = request.host_url+"static/images/farms/"+save_pic_progress(files["stage_image2"])
+        dta["st2_image_url1"] = request.host_url+"static/images/farms/"+save_pic_progress(files["stage_image3"])
+        dta["st2_image_url2"] = request.host_url+"static/images/farms/"+save_pic_progress(files["stage_image4"])
+
+        data = Sponserd().update_progress(sponsered_id,dta)
+        return {
+           "message": "Successfully Got sponsered Project",
+            "data": data
+        }, 201
     except Exception as e:
         return {
             "message": "Something went wrong",

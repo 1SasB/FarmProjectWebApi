@@ -38,3 +38,22 @@ def save_pic_id(picture):
     picture.thumbnail((150, 150))
     picture.save(file_path)
     return file_name
+
+
+def save_pic_progress(picture):
+    """Saves an image to disk"""
+    file_name = secrets.token_hex(8) +os.path.splitext(picture.filename)[1]
+    if not os.path.isdir(os.path.join(app.root_path, 'static')):
+        os.mkdir(os.path.join(app.root_path,"static"))
+        os.mkdir(os.path.join(app.root_path,"static/images"))
+        os.mkdir(os.path.join(app.root_path,"static/images/progress"))
+    if not os.path.isdir(os.path.join(app.root_path, 'static/images')):
+        os.mkdir(os.path.join(app.root_path,"static/images"))
+        os.mkdir(os.path.join(app.root_path,"static/images/progress"))
+    if not os.path.isdir(os.path.join(app.root_path, 'static/images/progress')):
+        os.mkdir(os.path.join(app.root_path,"static/images/progress"))
+    file_path = os.path.join(app.root_path, "static/images/progress", file_name)
+    picture = Image.open(picture)
+    picture.thumbnail((150, 150))
+    picture.save(file_path)
+    return file_name
